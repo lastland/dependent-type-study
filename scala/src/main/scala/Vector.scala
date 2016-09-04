@@ -19,12 +19,12 @@ object Vector {
     def apply(a: A): Vec[A, N]
   }
 
-  implicit def zRep[A] = new SNat[A, Z] {
+  implicit def zRep[A] = new Rep[A, Z] {
     def apply(a: A) = Nil
   }
 
-  implicit def nRep[A, N <: Nat](implicit nat: SNat[A, N]) =
-    new SNat[A, Succ[N]] {
+  implicit def nRep[A, N <: Nat](implicit nat: Rep[A, N]) =
+    new Rep[A, Succ[N]] {
       def apply(a: A) = Cons(a, rep[A, N](a))
     }
 
@@ -38,14 +38,14 @@ object Vector {
   }
 
   implicit def nilConcat[A, N <: Nat] =
-    new Plus[A, Vec[A, Z], Vec[A, N]] {
+    new Concat[A, Vec[A, Z], Vec[A, N]] {
       type MN = N
       def apply(xs: Vec[A, Z], ys: Vec[A, N]): Out = ys
     }
 
   implicit def conConcat[A, M <: Nat, N <: Nat]
-    (implicit tail: Plus[A, Vec[A, M], Vec[A, N]]) =
-    new Plus[A, Vec[A, Succ[M]], Vec[A, N]] {
+    (implicit tail: Concat[A, Vec[A, M], Vec[A, N]]) =
+    new Concat[A, Vec[A, Succ[M]], Vec[A, N]] {
       type MN = Succ[tail.MN]
       def apply(xs: Vec[A, Succ[M]], ys: Vec[A, N]): Out =
         Cons(xs.h, app(xs.t, ys))
