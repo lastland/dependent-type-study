@@ -19,7 +19,7 @@ object Vector {
     def apply(a: A): Vec[A, N]
   }
 
-  implicit def zRepn[A] = new SNat[A, Z] {
+  implicit def zRep[A] = new SNat[A, Z] {
     def apply(a: A) = Nil
   }
 
@@ -53,5 +53,5 @@ object Vector {
 
   def app[A, N <: Nat, M <: Nat](xs: Vec[A, N], ys: Vec[A, M])
     (implicit concat: Concat[A, Vec[A, N], Vec[A, M]]): concat.Out =
-    plus(xs, ys)
+    concat(xs, ys)
 }
